@@ -11,14 +11,20 @@ from astropy.table import Table
 
 ################################################################################
 
-filterid = 2 # 1 for g, 2 for r, 12 for combined g and r
+filterid = 1 # 1 for g, 2 for r, 12 for combined g and r
+
+
+if filterid==1: band='g'
+if filterid==2: band='r'
+if filterid==12: band='g_and_r'
+
 ################################################################################
 
 max_sep = 1.5 * u.arcsec
 ################################################################################
 
 main_path = '/Volumes/Expansion/ZTF_DR_work/'
-input_main_folder = main_path+'classification_DR11_4MOST_extragalactic/'
+input_main_folder = main_path+'classification_DR11_4MOST_extragalactic/classifications_and_features/'
 catalog_folder = '../catalogs_others/'
 input_catalog = catalog_folder + 'Chen2020_VS_ZTFDR2.parquet' #example for Chen et al. 2020 catalog
 output_folder = '../catalogs_others/'
@@ -27,9 +33,6 @@ output_file_unique = output_folder+'Chen2020_DR11_classifications_match_unique_'
 
 ################################################################################
 
-if filterid==1: band='g'
-if filterid==2: band='r'
-if filterid==12: band='g_and_r'
 
 input_folder = input_main_folder + band + 'band/'
 
