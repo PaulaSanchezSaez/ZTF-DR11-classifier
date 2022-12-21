@@ -19,7 +19,7 @@ filterid = 2 # 1 for g, 2 for r, 12 for combined g and r
 
 main_path = '/Volumes/Expansion/ZTF_DR_work/'
 input_files = sorted(glob.glob(main_path+'DR11_features_4MOST_extragalactic/'+'*parquet'))
-output_main_folder = main_path+'classification_DR11_4MOST_extragalactic/'
+output_main_folder = main_path+'classification_DR11_4MOST_extragalactic/classifications_and_features/'
 
 #######################################################################################
 
@@ -56,6 +56,8 @@ features_list = pd.read_pickle(features_list_4model)
 #######################################################################################
 
 for file in input_files_names:
+#for i in range(10):
+#    file = input_files_names[i]
     print('classifying file ',file)
     df_feat = pd.read_parquet(main_path+'DR11_features_4MOST_extragalactic/'+file)
     df_feat.replace([np.inf, -np.inf], np.nan, inplace=True)
@@ -124,51 +126,53 @@ for file in input_files_names:
     #non var sources
 
     X_nonvar = df.loc[y_pred_init!='variable',:]
-    X_nonvar['pred_class']=y_pred_init[np.where(y_pred_init!='variable')]
-    X_nonvar['pred_class_prob']=np.max(y_pred_prob_init[np.where(y_pred_init!='variable')],axis=1)
+    X_nonvar.loc[:,'pred_class']=y_pred_init[np.where(y_pred_init!='variable')]
+    X_nonvar.loc[:,'pred_class_prob']=np.max(y_pred_prob_init[np.where(y_pred_init!='variable')],axis=1)
 
     #periodic sources
 
-    X_periodic['pred_class']=y_pred_periodic
-    X_periodic['pred_class_prob']=np.max(y_pred_prob_periodic,axis=1)
+    X_periodic.loc[:,'pred_class']=y_pred_periodic
+    X_periodic.loc[:,'pred_class_prob']=np.max(y_pred_prob_periodic,axis=1)
 
-    X_periodic['pred_init_class']='variable'
-    X_periodic['pred_init_class_prob']=y_pred_prob_init_periodic
+    X_periodic.loc[:,'pred_init_class']='variable'
+    X_periodic.loc[:,'pred_init_class_prob']=y_pred_prob_init_periodic
 
-    X_periodic['pred_var_class']='Periodic'
-    X_periodic['pred_var_class_prob']=y_pred_prob_var_periodic
+    X_periodic.loc[:,'pred_var_class']='Periodic'
+    X_periodic.loc[:,'pred_var_class_prob']=y_pred_prob_var_periodic
 
 
     y_pred_prob_var = rf_model_init.predict_proba(df)
 
     #stocashtic sources
 
-    X_stochastic['pred_class']=y_pred_stochastic
-    X_stochastic['pred_class_prob']=np.max(y_pred_prob_stochastic,axis=1)
+    X_stochastic.loc[:,'pred_class']=y_pred_stochastic
+    X_stochastic.loc[:,'pred_class_prob']=np.max(y_pred_prob_stochastic,axis=1)
 
-    X_stochastic['pred_init_class']='variable'
-    X_stochastic['pred_init_class_prob']=y_pred_prob_init_stochastic
+    X_stochastic.loc[:,'pred_init_class']='variable'
+    X_stochastic.loc[:,'pred_init_class_prob']=y_pred_prob_init_stochastic
 
-    X_stochastic['pred_var_class']='Stochastic'
-    X_stochastic['pred_var_class_prob']=y_pred_prob_var_stochastic
+    X_stochastic.loc[:,'pred_var_class']='Stochastic'
+    X_stochastic.loc[:,'pred_var_class_prob']=y_pred_prob_var_stochastic
 
 
 
     #transient sources
 
-    X_transient['pred_class']=y_pred_transient
-    X_transient['pred_class_prob']=np.max(y_pred_prob_transient,axis=1)
+    X_transient.loc[:,'pred_class']=y_pred_transient
+    X_transient.loc[:,'pred_class_prob']=np.max(y_pred_prob_transient,axis=1)
 
-    X_transient['pred_init_class']='variable'
-    X_transient['pred_init_class_prob']=y_pred_prob_init_transient
+    X_transient.loc[:,'pred_init_class']='variable'
+    X_transient.loc[:,'pred_init_class_prob']=y_pred_prob_init_transient
 
-    X_transient['pred_var_class']='Transient'
-    X_transient['pred_var_class_prob']=y_pred_prob_var_transient
+    X_transient.loc[:,'pred_var_class']='Transient'
+    X_transient.loc[:,'pred_var_class_prob']=y_pred_prob_var_transient
 
     all_pred = pd.concat([X_nonvar,X_transient,X_stochastic,X_periodic])
 
 
-    out_file = df_feat[['objectid','objra','objdec','gal_b','gal_l','nepochs','Mean','gmag','rmag','imag','w1mpro_pm_2','w2mpro_pm_2']].join(all_pred)
+    #out_file = df_feat[['objectid','objra','objdec','gal_b','gal_l','nepochs','Mean','gmag','rmag','imag','w1mpro_pm_2','w2mpro_pm_2']].join(all_pred)
+    out_file = df_feat.join(all_pred[['pred_init_class','pred_init_class_prob','pred_var_class','pred_var_class_prob','pred_class','pred_class_prob']])
+
     #print(out_file.columns)
     out_file.to_parquet(output_folder+'classification_'+file)
 
