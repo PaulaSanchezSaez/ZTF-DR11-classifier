@@ -23,8 +23,8 @@ if filterid==12: band='g_and_r'
 max_sep = 1.5 * u.arcsec
 ################################################################################
 
-main_path = '/Volumes/Expansion/ZTF_DR_work/'
-input_main_folder = main_path+'classification_DR11_4MOST_extragalactic/classifications_and_features/'
+main_path = '/Volumes/Paula_SSD/ZTF_DR_work/'
+input_main_folder = main_path+'classification_DR11_4MOST_extragalactic_2023/classifications_and_features/'
 catalog_folder = '../catalogs_others/'
 input_catalog = catalog_folder + 'Chen2020_VS_ZTFDR2.parquet' #example for Chen et al. 2020 catalog
 output_folder = '../catalogs_others/'
@@ -60,7 +60,7 @@ for file in input_files:
     coords_DR = SkyCoord(ra=df.objra.values*u.degree, dec=df.objdec.values*u.degree)
     idx, d2d, d3d = match_coord(coords_catalog,coords_DR,nthneighbor=1)
     ang=np.array(d2d)
-    n=np.where(ang<0.00416667)
+    n=np.where(ang<max_sep.to(u.deg).value)
     n=n[0]
 
     print("number of matches",len(n))
@@ -81,6 +81,8 @@ for file in input_files:
 match_cat = pd.concat(match_cat)
 
 match_cat.reset_index(inplace=True)
+
+
 
 match_cat.to_parquet(output_file)
 
