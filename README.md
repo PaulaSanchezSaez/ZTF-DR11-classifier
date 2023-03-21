@@ -1,10 +1,10 @@
 # ZTF-DR11-classifier
 ## Code used for the work presented in Sanchez-Saez et al. 2023
 
-  Code to train the g-band model: BRF_indep_g_band_hierarchical_PS1score_WISE_ZTFfeat_SNgrouped_zsep_20230309.ipynb
-  Code to train the r-band model: BRF_indep_r_band_hierarchical_PS1score_WISE_ZTFfeat_SNgrouped_zsep_20230309.ipynb
-  Code used to classify the ZTF/4MOST data: classify_4MOST_extragalactic.py
-  Code used to obtain classifications for an external catalog: matching_cat_ZTF_DR11_classifications.py
+Code to train the g-band model: BRF_indep_g_band_hierarchical_PS1score_WISE_ZTFfeat_SNgrouped_zsep_20230309.ipynb <br />
+Code to train the r-band model: BRF_indep_r_band_hierarchical_PS1score_WISE_ZTFfeat_SNgrouped_zsep_20230309.ipynb <br />
+Code used to classify the ZTF/4MOST data: classify_4MOST_extragalactic.py <br />
+Code used to obtain classifications for an external catalog: matching_cat_ZTF_DR11_classifications.py <br />
 
 
 ### Note: some of the features used by the code published in this repository have a name different than the one presented in the paper:
