@@ -11,10 +11,13 @@ Code used to obtain classifications for an external catalog: matching_cat_ZTF_DR
 
 
 
+
+
+
 Note: some of the features used by the code published in this repository have a name different than the one presented in the paper:
 
-Multiband_period -> Period # name inherited from the model presented in Sanchez-Saez et al. 2021a
-gps1-rps1 -> g-r
+Multiband_period -> Period # name inherited from the model presented in Sanchez-Saez et al. 2021a //
+gps1-rps1 -> g-r //
 rps1-ips1 -> r-i
 gps1-W1 -> g-W1
 gps1-W2 -> g-W2
